@@ -1,33 +1,37 @@
 import React, {useState} from 'react';
 import Tile from './Tile.js';
-import {getFunction, setFunction} from './Client.js';
+import {contractMethodList} from './Client.js';
+
 
 function TileContainer(props){
 
-    const [gotVal, setgotVal] = useState("");
+    const [inputs, setInputs] = useState(Array(contractMethodList.length).fill(''));
 
-    async function getValue() {
-        const t = await getFunction();
-        setgotVal(t);
+    const changeFunctions = function (i, v) {
+        setInputs(Object.assign([...inputs], {[i]: v}))
     }
 
-    const [setX, setSetX] = useState("");
-
-    function handleChange(event){
-        setSetX(event.target.value);
-    }
-
-    async function setValue() {
-        const t = await setFunction(setX);
-        setSetX(t);
+    const clickFunctions = async function(i) {
+        const t = await contractMethodList[i].functionDef([inputs[i]]);
+        setInputs(Object.assign([...inputs], {[i]: t}))
     }
 
 
     return (
-        <div className="tileContainer">
-            <Tile title="Get the value of X" button_text="Get X" isReadOnly={true} placeHolder={gotVal} fun={getValue}/>
-            <Tile title="Set the value of X" button_text="Set X" isReadOnly={false} setValue={setX} fun={setValue} inputChange={handleChange}/>
-        </div>
+        inputs.map((v, i) => (
+            <div key={i}>
+            <Tile 
+            title={contractMethodList[i].name} 
+            button_text={contractMethodList[i].name}  
+            isReadOnly={contractMethodList[i].noInputs} 
+            setValue={v} 
+            fun={e => clickFunctions(i)} 
+            inputChange={e => changeFunctions(i, e.target.value)}
+            />
+          </div>
+        )
+
+          )
     )
 }
 

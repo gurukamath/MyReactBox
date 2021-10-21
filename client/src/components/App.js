@@ -8,7 +8,7 @@ function App() {
     <div className="App">
       <header className="App-header">Simple Storage Application</header>
       <button onClick={clientInit} className="btn btn-secondary connectClient">Connect Client</button>
-      <TileContainer/>
+      <div className="tileContainer"><TileContainer/></div>
       <Footer/>
     </div>
   );

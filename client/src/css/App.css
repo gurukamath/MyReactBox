@@ -30,7 +30,6 @@
 }
 
 .footer {
-  position: fixed;
   text-align: center;
   bottom: 0;
   width: 100%;
@@ -55,13 +54,19 @@ color: #1abc9c;
 color: #777;
 }
 
-.tile {
-
-}
 
 .tileContainer {
   width: 70%;
   margin: 5% auto;
+}
+
+.btn-secondary {
+  width: 100%;
+  font-size: small;
+}
+
+.input-group-text {
+  width: 20%;
 }
 
 .App-link {
@@ -70,6 +75,7 @@ color: #777;
 
 .connectClient {
   margin-top: 5%;
+  width: 15%;
 }
 
 @keyframes App-logo-spin {

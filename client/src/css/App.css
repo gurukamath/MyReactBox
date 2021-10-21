@@ -31,11 +31,13 @@
 
 .footer {
   text-align: center;
+  position: fixed;
   bottom: 0;
   width: 100%;
   height: 70px;
   background-color: #282c34;
   padding-top: 15px;
+  z-index: 10;
 }
 
 .footer a {
@@ -51,13 +53,13 @@ color: #1abc9c;
 .footer p {
   margin-top: 10px;
   font-size: 12px;
-color: #777;
+  color: #777;
 }
 
 
 .tileContainer {
   width: 70%;
-  margin: 5% auto;
+  margin: 5% auto 10%;
 }
 
 .btn-secondary {

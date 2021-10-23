@@ -1,6 +1,6 @@
 import Web3 from 'web3';
-import { getMethodList, defineFunction, handleErrorMessage } from './utils';
-const contractJSON = require("../contracts/SecretAuction.json"); 
+import { getMethodList, defineFunction } from './utils';
+const contractJSON = require("../contracts/SimpleStorage.json"); 
 
 
 let selectedAccount;

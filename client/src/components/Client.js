@@ -1,5 +1,7 @@
+// var Contract = require('web3-eth-contract');
 import Web3 from 'web3';
-import { getMethodList, defineFunction } from './utils';
+import detectEthereumProvider from '@metamask/detect-provider';
+import { getMethodList, defineFunction, handleErrorMessage } from './utils';
 const contractJSON = require("../contracts/SimpleStorage.json"); 
 
 
@@ -9,18 +11,43 @@ let web3;
 
 export const clientInit = async function(){
 
-    const provider = 'http://localhost:8545';
 
-    web3 = new Web3(provider);
+// Initiate the Web3 Provider
+    const provider = await detectEthereumProvider();
 
-    const accountsList = await web3.eth.getAccounts()
-                            .catch(e => console.log('Error Web3 Accounts: ', e.message));
-    selectedAccount = accountsList[0];
-    contractInstance = new web3.eth.Contract(contractJSON.abi, 
-                                contractJSON.networks[5777].address,
-                                                    {from: selectedAccount});
-    
+    if (provider === window.ethereum) {
+        web3 = new Web3(provider);
+    } else {
+        web3 = new Web3('http://localhost:8545'); // Local Ganache
+    }
 
+
+    let netId = await provider.request({ method: 'net_version' });
+
+    let accounts = await provider.request({method: 'eth_requestAccounts'});
+    selectedAccount = accounts[0];
+
+    contractInstance = defineNewContractInstance(contractJSON, netId, selectedAccount);
+
+    // Listen in case something changes
+
+    provider.on('networkChanged', (_netId) => {
+        netId = _netId;
+        contractInstance = defineNewContractInstance(contractJSON, netId, selectedAccount);
+    })
+
+    provider.on('accountsChanged', (accounts) => {
+        selectedAccount = accounts[0];
+        // nonce = web3.eth.getTransactionCount(selectedAccount);
+        contractInstance = defineNewContractInstance(contractJSON, netId, selectedAccount);
+    })
+
+}
+
+function defineNewContractInstance(jsonObj, id, account) {
+    return new web3.eth.Contract(jsonObj.abi, 
+                                jsonObj.networks[id].address,
+                                                    {from: account});
 }
 
 const initiateMethodList = getMethodList(contractJSON);
@@ -28,7 +55,8 @@ const initiateMethodList = getMethodList(contractJSON);
 initiateMethodList.forEach((element) => {
     element.functionDef = function(inputs){
         return defineFunction(inputs, contractInstance, element);
-    }   
+    }
+    
 })
 
 export const contractMethodList = initiateMethodList;

@@ -29,7 +29,6 @@ function Tile(props){
                             return(
                                 <div key={i}>
                                     <TileInputs 
-                                        contractMethod={_method} 
                                         input={inputsList[i]}
                                         setValue={v} 
                                         inputChange={e => changeFunctions(i, e.target.value)}/>  
@@ -40,7 +39,7 @@ function Tile(props){
     return (
             <div>
                 <div className="mb-3 tile">
-                    <span className="input-group-text" id="basic-addon2">{"Function Name: " + _method.name.toUpperCase()}</span>
+                    <span className="input-group-text" id="basic-addon2">{"Function Name: " + _method.name}</span>
                     {tileInputList}     
                 </div>
                 <input type="text" className="output-display" readOnly value={output}/>

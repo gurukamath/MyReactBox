@@ -1,7 +1,7 @@
 // var Contract = require('web3-eth-contract');
 import Web3 from 'web3';
 import detectEthereumProvider from '@metamask/detect-provider';
-import { getMethodList, defineFunction, handleErrorMessage } from './utils';
+import { getMethodList, defineFunction} from './utils';
 const contractJSON = require("../contracts/SimpleStorage.json"); 
 
 
